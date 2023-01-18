@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { StyleSheet, Text, View, StatusBar, Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
@@ -9,12 +10,19 @@ export default function App() {
     longitudeDelta: 0.001421,
   };
 
-  const localizacao = {
-    latitude: -33.867886,
-    longitude: -63.987,
-    latitudeDelta: 10,
-    longitudeDelta: 10,
-  };
+  // const localizacao = {
+  //   latitude: -33.867886,
+  //   longitude: -63.987,
+  //   latitudeDelta: 10,
+  //   longitudeDelta: 10,
+  // };
+
+  const [localizacao, setLocalizacao] = useState({
+    latitude: -23.52608202998518,
+    longitude: -46.54024478809865,
+    latitudeDelta: 0.00922,
+    longitudeDelta: 0.001421,
+  });
 
   return (
     <>
@@ -28,6 +36,7 @@ export default function App() {
           userInterfaceStyle="dark" //Somente funciona no ios
           // maxZoomLevel={16}
           // minZoomLevel={3}
+          onPress={setLocalizacao({})}
         >
           <Marker
             coordinate={localizacao}
