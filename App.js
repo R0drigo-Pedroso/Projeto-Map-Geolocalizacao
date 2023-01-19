@@ -4,32 +4,14 @@ import MapView, { Marker } from "react-native-maps";
 
 export default function App() {
   const regiaoInicial = {
-    latitude: -23.52608202998518,
-    longitude: -46.54024478809865,
+    latitude: -10,
+    longitude: -55,
 
-    latitudeDelta: 0.0222,
-    longitudeDelta: 0.00121,
+    latitudeDelta: 40,
+    longitudeDelta: 40,
   };
 
-  const [localizacao, setLocalizacao] = useState({
-    latitude: -23.52608202998518,
-    longitude: -46.54024478809865,
-    latitudeDelta: 0.0222,
-    longitudeDelta: 0.00121,
-  });
-
-  const novaLocalizacao = (event) => {
-    let coordenadas = {
-      latitude: event.nativeEvent.coordinate.latitude,
-      longitude: event.nativeEvent.coordinate.longitude,
-    };
-    setLocalizacao({
-      ...coordenadas,
-      latitudeDelta: 0.0222,
-      longitudeDelta: 0.00121,
-    });
-    console.log(localizacao);
-  };
+  const [localizacao, setLocalizacao] = useState();
 
   return (
     <>
@@ -37,25 +19,36 @@ export default function App() {
       <View style={styles.container}>
         <MapView
           style={styles.mapa}
-          initialRegion={regiaoInicial}
+          // initialRegion={regiaoInicial}
+          region={localizacao ?? regiaoInicial}
           liteMode={false} //Somete funciona o android
           // mapType="none"
           userInterfaceStyle="dark" //Somente funciona no ios
           // maxZoomLevel={16}
           // minZoomLevel={3}
-          onPress={novaLocalizacao}
+          onPress={(e) => {
+            setLocalizacao({
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+            });
+            console.log(localizacao);
+          }}
         >
-          <Marker
-            coordinate={localizacao}
-            pinColor="#887"
-            draggable
-            title="Você está aqui!"
-            onPress={(event) => {
-              console.log(event.nativeEvent);
-            }}
-          >
-            <Image source={require("./assets/dinossauro.png")} />
-          </Marker>
+          {localizacao && (
+            <Marker
+              coordinate={localizacao}
+              pinColor="#887"
+              draggable
+              title="Você está aqui!"
+              onPress={(event) => {
+                console.log(event.nativeEvent);
+              }}
+            >
+              <Image source={require("./assets/dinossauro.png")} />
+            </Marker>
+          )}
         </MapView>
       </View>
     </>
