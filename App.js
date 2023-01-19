@@ -71,9 +71,3 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
-// const localizacao = {
-//   latitude: -33.867886,
-//   longitude: -63.987,
-//   latitudeDelta: 10,
-//   longitudeDelta: 10,
-// };
