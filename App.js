@@ -18,19 +18,6 @@ export default function App() {
     longitudeDelta: 0.00121,
   });
 
-  const novaLocalizacao = (event) => {
-    let coordenadas = {
-      latitude: event.nativeEvent.coordinate.latitude,
-      longitude: event.nativeEvent.coordinate.longitude,
-    };
-    setLocalizacao({
-      ...coordenadas,
-      latitudeDelta: 0.0222,
-      longitudeDelta: 0.00121,
-    });
-    console.log(localizacao);
-  };
-
   return (
     <>
       <StatusBar />
@@ -43,7 +30,13 @@ export default function App() {
           userInterfaceStyle="dark" //Somente funciona no ios
           // maxZoomLevel={16}
           // minZoomLevel={3}
-          onPress={novaLocalizacao}
+          onPress={(e) =>
+            setLocalizacao({
+              ...localizacao,
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+            })
+          }
         >
           <Marker
             coordinate={localizacao}
