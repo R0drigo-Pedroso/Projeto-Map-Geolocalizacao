@@ -1,28 +1,35 @@
 import { useState } from "react";
-import { StyleSheet, Text, View, StatusBar, Image } from "react-native";
+import { StyleSheet, View, StatusBar, Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 export default function App() {
   const regiaoInicial = {
     latitude: -23.52608202998518,
     longitude: -46.54024478809865,
-    latitudeDelta: 0.00922,
-    longitudeDelta: 0.001421,
-  };
 
-  // const localizacao = {
-  //   latitude: -33.867886,
-  //   longitude: -63.987,
-  //   latitudeDelta: 10,
-  //   longitudeDelta: 10,
-  // };
+    latitudeDelta: 0.0222,
+    longitudeDelta: 0.00121,
+  };
 
   const [localizacao, setLocalizacao] = useState({
     latitude: -23.52608202998518,
     longitude: -46.54024478809865,
-    latitudeDelta: 0.00922,
-    longitudeDelta: 0.001421,
+    latitudeDelta: 0.0222,
+    longitudeDelta: 0.00121,
   });
+
+  const novaLocalizacao = (event) => {
+    let coordenadas = {
+      latitude: event.nativeEvent.coordinate.latitude,
+      longitude: event.nativeEvent.coordinate.longitude,
+    };
+    setLocalizacao({
+      ...coordenadas,
+      latitudeDelta: 0.0222,
+      longitudeDelta: 0.00121,
+    });
+    console.log(localizacao);
+  };
 
   return (
     <>
@@ -32,11 +39,11 @@ export default function App() {
           style={styles.mapa}
           initialRegion={regiaoInicial}
           liteMode={false} //Somete funciona o android
-          mapType="satellite"
+          // mapType="none"
           userInterfaceStyle="dark" //Somente funciona no ios
           // maxZoomLevel={16}
           // minZoomLevel={3}
-          onPress={setLocalizacao({})}
+          onPress={novaLocalizacao}
         >
           <Marker
             coordinate={localizacao}
@@ -64,3 +71,9 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
+// const localizacao = {
+//   latitude: -33.867886,
+//   longitude: -63.987,
+//   latitudeDelta: 10,
+//   longitudeDelta: 10,
+// };
