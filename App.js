@@ -30,13 +30,14 @@ export default function App() {
           userInterfaceStyle="dark" //Somente funciona no ios
           // maxZoomLevel={16}
           // minZoomLevel={3}
-          onPress={(e) =>
+          onPress={(e) => {
             setLocalizacao({
               ...localizacao,
               latitude: e.nativeEvent.coordinate.latitude,
               longitude: e.nativeEvent.coordinate.longitude,
-            })
-          }
+            });
+            console.log(localizacao);
+          }}
         >
           <Marker
             coordinate={localizacao}
