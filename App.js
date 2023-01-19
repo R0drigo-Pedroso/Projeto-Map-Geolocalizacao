@@ -1,14 +1,51 @@
-import { useState } from "react";
-import { StyleSheet, View, StatusBar, Image } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  StatusBar,
+  Image,
+  Alert,
+  Button,
+} from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import * as Location from "expo-location";
 
 export default function App() {
-  const regiaoInicial = {
-    latitude: -10,
-    longitude: -55,
+  /* state para a geolocalização */
+  const [minhaLocalizacao, setMinhaLocalizacao] = useState(null);
 
-    latitudeDelta: 40,
-    longitudeDelta: 40,
+  useEffect(() => {
+    async function obterLocalizacao() {
+      // Acessando o status da requisição de permissão de uso
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      // Verificando o status
+      if (status !== "granted") {
+        Alert.alert(
+          "Ops!",
+          "Você não autorizou o uso de recursos de localização"
+        );
+        return;
+      }
+
+      // Acessando os dados de geolocalização
+      let localizacaoAtual = await Location.getCurrentPositionAsync({});
+
+      // Adicionando os dados ao state
+      setMinhaLocalizacao(localizacaoAtual);
+    }
+
+    obterLocalizacao();
+  }, []);
+
+  console.log(minhaLocalizacao);
+
+  /* São Paulo */
+  const regiaoInicial = {
+    latitude: -23.533773,
+    longitude: -46.65529,
+    latitudeDelta: 10,
+    longitudeDelta: 10,
   };
 
   const [localizacao, setLocalizacao] = useState();
@@ -16,25 +53,25 @@ export default function App() {
   return (
     <>
       <StatusBar />
-      <View style={styles.container}>
+      <View>
+        <View style={styles.Botao}>
+          <Button
+            title="Sua localização"
+            onPress={() => {
+              setLocalizacao({
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+                latitude: minhaLocalizacao.coords.latitude,
+                longitude: minhaLocalizacao.coords.longitude,
+              });
+            }}
+          />
+        </View>
         <MapView
           style={styles.mapa}
-          // initialRegion={regiaoInicial}
           region={localizacao ?? regiaoInicial}
           liteMode={false} //Somete funciona o android
-          // mapType="none"
           userInterfaceStyle="dark" //Somente funciona no ios
-          // maxZoomLevel={16}
-          // minZoomLevel={3}
-          onPress={(e) => {
-            setLocalizacao({
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-              latitude: e.nativeEvent.coordinate.latitude,
-              longitude: e.nativeEvent.coordinate.longitude,
-            });
-            console.log(localizacao);
-          }}
         >
           {localizacao && (
             <Marker
@@ -46,7 +83,7 @@ export default function App() {
                 console.log(event.nativeEvent);
               }}
             >
-              <Image source={require("./assets/dinossauro.png")} />
+              {/* <Image source={require("./assets/dinossauro.png")} /> */}
             </Marker>
           )}
         </MapView>
@@ -56,6 +93,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  viewBotao: {},
   container: {
     flex: 1,
   },
