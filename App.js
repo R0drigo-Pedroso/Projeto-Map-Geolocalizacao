@@ -11,25 +11,7 @@ export default function App() {
     longitudeDelta: 0.00121,
   };
 
-  const [localizacao, setLocalizacao] = useState({
-    latitude: -23.52608202998518,
-    longitude: -46.54024478809865,
-    latitudeDelta: 0.0222,
-    longitudeDelta: 0.00121,
-  });
-
-  const novaLocalizacao = (event) => {
-    let coordenadas = {
-      latitude: event.nativeEvent.coordinate.latitude,
-      longitude: event.nativeEvent.coordinate.longitude,
-    };
-    setLocalizacao({
-      ...coordenadas,
-      latitudeDelta: 0.0222,
-      longitudeDelta: 0.00121,
-    });
-    console.log(localizacao);
-  };
+  const [localizacao, setLocalizacao] = useState();
 
   return (
     <>
@@ -43,19 +25,28 @@ export default function App() {
           userInterfaceStyle="dark" //Somente funciona no ios
           // maxZoomLevel={16}
           // minZoomLevel={3}
-          onPress={novaLocalizacao}
+          onPress={(e) => {
+            setLocalizacao({
+              ...localizacao,
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+            });
+            console.log(localizacao);
+          }}
         >
-          <Marker
-            coordinate={localizacao}
-            pinColor="#887"
-            draggable
-            title="Você está aqui!"
-            onPress={(event) => {
-              console.log(event.nativeEvent);
-            }}
-          >
-            <Image source={require("./assets/dinossauro.png")} />
-          </Marker>
+          {localizacao && (
+            <Marker
+              coordinate={localizacao}
+              pinColor="#887"
+              draggable
+              title="Você está aqui!"
+              onPress={(event) => {
+                console.log(event.nativeEvent);
+              }}
+            >
+              <Image source={require("./assets/dinossauro.png")} />
+            </Marker>
+          )}
         </MapView>
       </View>
     </>
